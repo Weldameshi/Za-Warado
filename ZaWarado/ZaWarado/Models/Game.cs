@@ -29,7 +29,7 @@ namespace ZaWarado.Models
         public int HazardPoints
         {
             get { return hazardPoints; }
-            set { hazardPoints = (value > 0) ? (value) : (0); }
+            set { hazardPoints = Math.Max(0, value); }
         }
 
         private int bioPoints;
@@ -37,7 +37,7 @@ namespace ZaWarado.Models
         public int BioPoints
         {
             get { return bioPoints; }
-            set { bioPoints = value; }
+            set { bioPoints = Math.Max(0, value); }
         }
 
         private int heatPoints;
@@ -45,7 +45,7 @@ namespace ZaWarado.Models
         public int HeatPoints
         {
             get { return heatPoints; }
-            set { heatPoints = value; }
+            set { heatPoints = Math.Max(0, value); }
         }
 
         private int cyclePoints;
@@ -53,7 +53,7 @@ namespace ZaWarado.Models
         public int CyclePoints
         {
             get { return cyclePoints; }
-            set { cyclePoints = value; }
+            set { cyclePoints = Math.Max(0, value); }
         }
 
         private int habitatPoints;
@@ -61,10 +61,10 @@ namespace ZaWarado.Models
         public int HabitatPoints
         {
             get { return habitatPoints; }
-            set { habitatPoints = value; }
+            set { habitatPoints = Math.Max(0, value); }
         }
 
-        private List<string> ObtainedHabitats { get; set; }
+        private Dictionary<string, bool> ObtainedHabitats { get; set; }
         private List<Card> PlayerHand { get; set; }
 
         Stack<Card> Deck { get; set; }
@@ -92,7 +92,7 @@ namespace ZaWarado.Models
             HeatPoints = 20;
             CyclePoints = 0;
             HabitatPoints = 0;
-            ObtainedHabitats = new List<string>();
+            ObtainedHabitats = new Dictionary<string, bool>();
             Deck = new Stack<Card>();
             PlayerHand = new List<Card>();
         }
@@ -144,7 +144,7 @@ namespace ZaWarado.Models
         private void EndTurn()
         {
             DiscardHand();
-            if(++TurnNumber > 10)
+            if (++TurnNumber > 10)
             {
                 EndGame();
             }
@@ -157,20 +157,23 @@ namespace ZaWarado.Models
 
         private void TallyScore()
         {
-            int scoreFromBioPoints      = (BioPoints - 20/*or30*/> 0) ? (BioPoints - 20/*or30*/) : (0);
-            int scoreFromHazardPoints   = HazardPoints * (1/*penalty per hazard*/);
-            int scoreFromHeatPoints     = (HeatPoints < 5 || HeatPoints > 15) ? ((HeatPoints < 5) ? (0 - HeatPoints) : (0 - (HeatPoints - 15))) : (0);
-            int scoreFromCyclePoints    = (CyclePoints > 30) ? (30) : (CyclePoints);
-            int scoreFromHabitatPoints  = HabitatPoints;
-            WorldScore = scoreFromBioPoints     +
-                         scoreFromHazardPoints  +
-                         scoreFromHeatPoints    +
-                         scoreFromCyclePoints   +
+            int scoreFromBioPoints = (BioPoints - 20 > 0) ? (BioPoints - 20) : (0);
+            int scoreFromHazardPoints = HazardPoints;
+            int scoreFromHeatPoints = (HeatPoints < 5 || HeatPoints > 15) ? ((HeatPoints < 5) ? (0 - HeatPoints) : (0 - (HeatPoints - 15))) : (0);
+            int scoreFromCyclePoints = (CyclePoints > 30) ? (30) : (CyclePoints);
+            int scoreFromHabitatPoints = HabitatPoints;
+            WorldScore = scoreFromBioPoints +
+                         scoreFromHazardPoints +
+                         scoreFromHeatPoints +
+                         scoreFromCyclePoints +
                          scoreFromHabitatPoints;
 
-            int numOfCollectedHabitats = ObtainedHabitats.Count;
+            int numOfCollectedHabitats = ObtainedHabitats.Count(habitat => habitat.Value);
         }
 
+        /// <summary>
+        /// Discards the entire players hand. 
+        /// </summary>
         private void DiscardHand()
         {
             PlayerHand = new List<Card>();
@@ -249,7 +252,7 @@ namespace ZaWarado.Models
                                 CheckObtainedHabitats("Wetlands", 3);
                                 break;
                             case Card.Type.WIND:
-                                if (true)//(Board.GetCard(xPosition - 1, yPosition) != null)
+                                if (true)//(Board.GetCard(xPosition - 1, yPosition) == null)
                                 {
                                     //Place extra plant card at xPosition-1, yPosition;
                                 }
@@ -263,7 +266,7 @@ namespace ZaWarado.Models
                                 DiscardCard(Card.Type.PLANT);
                                 break;
                             case Card.Type.MOUNTAIN:
-                                switch(Card.Type.FIRE)//Board.GetCard(xPosition + 1, yPosition + 1).type)
+                                switch (Card.Type.FIRE)//Board.GetCard(xPosition + 1, yPosition + 1).type)
                                 {
                                     case Card.Type.WATER:
                                         BioPoints += 3;
@@ -320,9 +323,9 @@ namespace ZaWarado.Models
                                 CheckObtainedHabitats("Wetlands", 3);
                                 break;
                             case Card.Type.WIND:
-                                if (true)//(Board.GetCard(xPosition + 1, yPosition) != null)
+                                if (true)//(Board.GetCard(xPosition + 1, yPosition) == null)
                                 {
-                                    //Place extra plant card at xPosition-1, yPosition;
+                                    //Place extra plant card at xPosition+1, yPosition;
                                 }
                                 else
                                 {
@@ -434,7 +437,7 @@ namespace ZaWarado.Models
                             case Card.Type.WATER:
                                 break;
                             case Card.Type.WIND:
-                                switch(Card.Type.PLANT)//Board.GetCard(xPosition, yPosition-2).type)
+                                switch (Card.Type.PLANT)//Board.GetCard(xPosition, yPosition-2).type)
                                 {
                                     case Card.Type.PLANT:
                                         HazardPoints -= 1;
@@ -520,16 +523,47 @@ namespace ZaWarado.Models
                         switch (aboveCard.type)
                         {
                             case Card.Type.PLANT:
+                                //Nothing happens
                                 break;
                             case Card.Type.WATER:
+                                switch (Card.Type.PLANT)//Board.GetCard(xPosition, yPosition-1).type)
+                                {
+                                    case Card.Type.PLANT:
+                                        HazardPoints -= 1;
+                                        BioPoints += 2;
+                                        CheckObtainedHabitats("Rainforest", 7);
+                                        break;
+                                    case Card.Type.WATER:
+                                        HazardPoints += 3;
+                                        DiscardCard(Card.Type.WATER);
+                                        break;
+                                    case Card.Type.FIRE:
+                                        HeatPoints += 1;
+                                        CyclePoints += 1;
+                                        break;
+                                    case Card.Type.MOUNTAIN:
+                                        HeatPoints -= 3;
+                                        CheckObtainedHabitats("Snow", 2);
+                                        break;
+                                    case Card.Type.PLAINS:
+                                        CyclePoints += 4;
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             case Card.Type.WIND:
                                 break;
                             case Card.Type.FIRE:
+                                HazardPoints -= 1;
+                                DrawCards(1);
                                 break;
                             case Card.Type.MOUNTAIN:
+                                HazardPoints += 1;
+                                CyclePoints -= 2;
                                 break;
                             case Card.Type.PLAINS:
+                                //Nothing happens
                                 break;
                             default:
                                 break;
@@ -542,16 +576,36 @@ namespace ZaWarado.Models
                         switch (rightCard.type)
                         {
                             case Card.Type.PLANT:
+                                if (true)//(Board.GetCard(xPosition + 2, yPosition) == null)
+                                {
+                                    //Place extra plant card at xPosition+2, yPosition;
+                                }
+                                else
+                                {
+                                    BioPoints -= 1;
+                                }
                                 break;
                             case Card.Type.WATER:
+                                CyclePoints += 2;
+                                CheckObtainedHabitats("Ocean Currents", 1);
                                 break;
                             case Card.Type.WIND:
                                 break;
                             case Card.Type.FIRE:
+                                HazardPoints += 2;
+                                HeatPoints += 2;
+                                if (true)//Board.GetCard(xPosition-1, yPosition).type == Card.Type.PLANT)
+                                {
+                                    BioPoints -= 2;
+                                    DiscardCard(Card.Type.PLANT);
+                                }
                                 break;
                             case Card.Type.MOUNTAIN:
+                                CheckObtainedHabitats("Caves", 1);
                                 break;
                             case Card.Type.PLAINS:
+                                HeatPoints += 1;
+                                CheckObtainedHabitats("Sand Dunes", 2);
                                 break;
                             default:
                                 break;
@@ -564,16 +618,25 @@ namespace ZaWarado.Models
                         switch (belowCard.type)
                         {
                             case Card.Type.PLANT:
+                                DrawCards(1);
                                 break;
                             case Card.Type.WATER:
+                                HeatPoints -= 1;
+                                CheckObtainedHabitats("Ocean Surface w/ Temperature-Regulating Air Currents", 2);
                                 break;
                             case Card.Type.WIND:
                                 break;
                             case Card.Type.FIRE:
+                                CyclePoints += 1;
+                                CheckObtainedHabitats("Updraft", 2);
                                 break;
                             case Card.Type.MOUNTAIN:
+                                CyclePoints += 2;
                                 break;
                             case Card.Type.PLAINS:
+                                BioPoints += 1;
+                                CyclePoints += 1;
+                                CheckObtainedHabitats("Flower Field", 4);
                                 break;
                             default:
                                 break;
@@ -586,16 +649,36 @@ namespace ZaWarado.Models
                         switch (leftCard.type)
                         {
                             case Card.Type.PLANT:
+                                if (true)//(Board.GetCard(xPosition - 2, yPosition) == null)
+                                {
+                                    //Place extra plant card at xPosition-2, yPosition;
+                                }
+                                else
+                                {
+                                    BioPoints -= 1;
+                                }
                                 break;
                             case Card.Type.WATER:
+                                CyclePoints += 2;
+                                CheckObtainedHabitats("Ocean Currents", 1);
                                 break;
                             case Card.Type.WIND:
                                 break;
                             case Card.Type.FIRE:
+                                HazardPoints += 2;
+                                HeatPoints += 2;
+                                if (true)//Board.GetCard(xPosition+1, yPosition).type == Card.Type.PLANT)
+                                {
+                                    BioPoints -= 2;
+                                    DiscardCard(Card.Type.PLANT);
+                                }
                                 break;
                             case Card.Type.MOUNTAIN:
+                                CheckObtainedHabitats("Caves", 1);
                                 break;
                             case Card.Type.PLAINS:
+                                HeatPoints += 1;
+                                CheckObtainedHabitats("Sand Dunes", 2);
                                 break;
                             default:
                                 break;
@@ -612,16 +695,27 @@ namespace ZaWarado.Models
                         switch (aboveCard.type)
                         {
                             case Card.Type.PLANT:
+                                //Nothing happens.
                                 break;
                             case Card.Type.WATER:
+                                HazardPoints += 2;
+                                HeatPoints += 1;
+                                CyclePoints += 3;
+                                CheckObtainedHabitats("Volcanic Vents", 1);
                                 break;
                             case Card.Type.WIND:
+                                CyclePoints += 1;
+                                CheckObtainedHabitats("Updraft", 2);
                                 break;
                             case Card.Type.FIRE:
                                 break;
                             case Card.Type.MOUNTAIN:
+                                BioPoints += 1;
                                 break;
                             case Card.Type.PLAINS:
+                                HazardPoints += 3;
+                                CyclePoints += 1;
+                                DrawCards(1);
                                 break;
                             default:
                                 break;
@@ -634,16 +728,30 @@ namespace ZaWarado.Models
                         switch (rightCard.type)
                         {
                             case Card.Type.PLANT:
+                                BioPoints -= 2;
+                                DiscardCard(Card.Type.PLANT);
                                 break;
                             case Card.Type.WATER:
+                                //Nothing happens.
                                 break;
                             case Card.Type.WIND:
+                                HazardPoints += 2;
+                                HeatPoints += 2;
+                                if (true)//Board.GetCard(xPosition+2, yPosition).type == Card.Type.PLANT)
+                                {
+                                    BioPoints -= 2;
+                                    DiscardCard(Card.Type.PLANT);
+                                }
                                 break;
                             case Card.Type.FIRE:
                                 break;
                             case Card.Type.MOUNTAIN:
+                                HeatPoints += 1;
+                                HazardPoints += 1;
                                 break;
                             case Card.Type.PLAINS:
+                                HazardPoints += 1;
+                                DiscardCard(Card.Type.PLANT);
                                 break;
                             default:
                                 break;
@@ -656,16 +764,26 @@ namespace ZaWarado.Models
                         switch (belowCard.type)
                         {
                             case Card.Type.PLANT:
+                                BioPoints += 1;
+                                DrawCards(1);
                                 break;
                             case Card.Type.WATER:
+                                CyclePoints += 2;
                                 break;
                             case Card.Type.WIND:
+                                HazardPoints -= 1;
+                                DrawCards(1);
                                 break;
                             case Card.Type.FIRE:
                                 break;
                             case Card.Type.MOUNTAIN:
+                                HeatPoints += 2;
+                                HazardPoints += 6;
+                                CyclePoints -= 3;
                                 break;
                             case Card.Type.PLAINS:
+                                HeatPoints += 1;
+                                CheckObtainedHabitats("Rocky Desert", 2);
                                 break;
                             default:
                                 break;
@@ -678,16 +796,30 @@ namespace ZaWarado.Models
                         switch (leftCard.type)
                         {
                             case Card.Type.PLANT:
+                                BioPoints -= 2;
+                                DiscardCard(Card.Type.PLANT);
                                 break;
                             case Card.Type.WATER:
+                                //Nothing happens.
                                 break;
                             case Card.Type.WIND:
+                                HazardPoints += 2;
+                                HeatPoints += 2;
+                                if (true)//Board.GetCard(xPosition-2, yPosition).type == Card.Type.PLANT)
+                                {
+                                    BioPoints -= 2;
+                                    DiscardCard(Card.Type.PLANT);
+                                }
                                 break;
                             case Card.Type.FIRE:
                                 break;
                             case Card.Type.MOUNTAIN:
+                                HeatPoints += 1;
+                                HazardPoints += 1;
                                 break;
                             case Card.Type.PLAINS:
+                                HazardPoints += 1;
+                                DiscardCard(Card.Type.PLANT);
                                 break;
                             default:
                                 break;
@@ -704,6 +836,7 @@ namespace ZaWarado.Models
                         switch (aboveCard.type)
                         {
                             case Card.Type.PLANT:
+                                CheckObtainedHabitats("Mountain")
                                 break;
                             case Card.Type.WATER:
                                 break;
@@ -893,10 +1026,17 @@ namespace ZaWarado.Models
         /// <param name="pointValue">point value of the habitat</param>
         private void CheckObtainedHabitats(string habitat, int pointValue)
         {
-            if (!ObtainedHabitats.Contains(habitat))
+            if (ObtainedHabitats.ContainsKey(habitat))
             {
-                HabitatPoints += pointValue;
-                ObtainedHabitats.Add(habitat);
+                if (!ObtainedHabitats[habitat])
+                {
+                    HabitatPoints += pointValue;
+                    ObtainedHabitats[habitat] = true;
+                }
+            }
+            else
+            {
+                throw new ArgumentException($"ObtainedHabitats doesn't have the habitat {habitat}");
             }
         }
 
