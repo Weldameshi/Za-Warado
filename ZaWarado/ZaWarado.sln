@@ -5,7 +5,10 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaWarado", "ZaWarado\ZaWarado.csproj", "{11A390E3-8D4A-4C81-B85A-D06B19D2AEFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZaWarudoUnitTesting", "ZaWarudoUnitTesting\ZaWarudoUnitTesting.csproj", "{648F5311-10E2-4D9D-83C0-0FD9F00A57D0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{AE17E290-2155-4528-A858-20174B0407CF}"
+	ProjectSection(SolutionItems) = preProject
+		Board.cs = Board.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
