@@ -16,7 +16,6 @@ namespace ZaWarado.Models
             internal Coord(int x, int y) { this.x = x; this.y = y; }
         }
 
-        //Card[,] board = null;
         Dictionary<Coord, Card> board = null;
 
         /// <summary>
@@ -43,13 +42,7 @@ namespace ZaWarado.Models
         /// Create a square board of the given dimension
         /// </summary>
         /// <param name="squareBoardDimensions">Square boarddimension</param>
-        public Board(int squareBoardDimensions) => board = new Dictionary<Coord, Card>();
-        /// <summary>
-        /// Create a rectangular board of the given dimensions
-        /// </summary>
-        /// <param name="horizontalBoardDimension">Horizontal board dimension</param>
-        /// <param name="verticalBoardDimension">Vertical board dimension</param>
-        public Board(int horizontalBoardDimension, int verticalBoardDimension) => board = new Dictionary<Coord, Card>();
+        public Board() => board = new Dictionary<Coord, Card>();
 
         /// <summary>
         /// Add a card to the board in the requested location
