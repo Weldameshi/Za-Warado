@@ -8,12 +8,23 @@ namespace ZaWarado.Models
         /// <summary>
         /// Internal data structure used to track the location of valid cards
         /// </summary>
-        internal struct Coord
+        internal struct Coord : IComparable<Coord>
         {
             internal int x;
             internal int y;
 
             internal Coord(int x, int y) { this.x = x; this.y = y; }
+
+            public int CompareTo(Coord other)
+            {
+                int diff = 0;
+
+                if (x < other.x || y < other.y) diff = -1;
+                else if (x == other.x && y == other.y) diff = 0;
+                else if (x > other.x || y > other.y) diff = 1;
+
+                return diff;
+            }
         }
 
         Dictionary<Coord, Card> board = null;
@@ -63,7 +74,7 @@ namespace ZaWarado.Models
         }
 
         /// <summary>
-        /// Return a card and it's paralell neighbors
+        /// Return a card and it's parallel neighbors.
         /// </summary>
         /// <param name="x">Central card X location</param>
         /// <param name="y">Central card Y location</param>
@@ -75,16 +86,31 @@ namespace ZaWarado.Models
 
             Card[,] neighbors = new Card[3, 3];
             Coord loc = new Coord(x, y);
-            if (board.ContainsKey(loc))
+
+            bool temporaryAdd = false;
+            Coord temporaryAddCoord = default;
+
+            if (!board.ContainsKey(loc))
             {
-                neighbors[1, 1] = board[loc];                             Coord next = new Coord(x, y - 1);
-                neighbors[1, 0] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x, y + 1);
-                neighbors[1, 2] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x - 1, y);
-                neighbors[0, 1] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x + 1, y);
-                neighbors[2, 1] = board.ContainsKey(next) ? board[next] : null;
-                return neighbors;
+                temporaryAdd = true;
+                temporaryAddCoord = loc;
+                board.Add(loc, null);
             }
-            return null;
+
+            /* X: 0 1 2 - Y: 0 0 0
+             * X: 0 1 2 - Y: 1 1 1
+             * X: 0 1 2 - Y: 2 2 2
+             */
+
+            neighbors[1, 1] = board[loc]; Coord next = new Coord(x, y - 1);
+            neighbors[1, 0] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x, y + 1);
+            neighbors[1, 2] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x - 1, y);
+            neighbors[0, 1] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x + 1, y);
+            neighbors[2, 1] = board.ContainsKey(next) ? board[next] : null;
+
+            if (temporaryAdd) board.Remove(temporaryAddCoord);
+
+            return neighbors;
         }
     }
 }
