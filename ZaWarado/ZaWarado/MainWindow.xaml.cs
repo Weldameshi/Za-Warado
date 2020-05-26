@@ -21,12 +21,15 @@ namespace ZaWarado
     /// </summary>
     public partial class MainWindow : Window
     {
+        Style btnStyle;
+        Grid boardDisplay;
 
         public MainWindow()
         {
             InitializeComponent();
+            btnStyle = this.FindResource("ButtonStyle") as Style;
             DisplayHand();
-            
+            SetUpBoard();
         }
 
         private void DisplayHand()
@@ -40,7 +43,7 @@ namespace ZaWarado
                 newBtn.MaxWidth = 120;
                 newBtn.MinHeight = 60;
                 newBtn.MinWidth = 120;
-                newBtn.Style = this.FindResource("MyButton") as Style;
+                newBtn.Style = btnStyle;
                 var brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
                 newBtn.Background = brush;
@@ -49,7 +52,12 @@ namespace ZaWarado
         }
         private void SetUpBoard()
         {
-
+            boardDisplay = new Grid();
+            GameArea.Children.Add(boardDisplay);
+            Grid.SetRow(boardDisplay, 1);
+            Grid.SetColumn(boardDisplay, 1);
+            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
+            boardDisplay.RowDefinitions.Add(new RowDefinition());
         }
 
         //Set button background code

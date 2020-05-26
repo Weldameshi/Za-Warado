@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800"
         WindowState="Maximized">
     <Window.Resources>
-        <Style x:Key="MyButton" TargetType="Button">
+        <Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="OverridesDefaultStyle" Value="True" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -27,7 +27,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid x:Name="Board" ShowGridLines="True">
+    <Grid x:Name="GameArea" ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50"/>
             <ColumnDefinition/>
