@@ -56,5 +56,52 @@ namespace UnitTesting
 
             Assert.IsTrue(board[0, 0].type == Card.Type.WATER);
         }
+
+        [TestMethod]
+        public void CreateABoardAndGetCardsInLocationsThatDoNotYetExistShouldAssertTrueIfReturnedCardsAreNull()
+        {
+            Board board = new Board();
+            Card testAgainst = null;
+
+            Assert.IsTrue(board[0, 0] == testAgainst);
+            Assert.IsTrue(board[10, 10] == testAgainst);
+            Assert.IsTrue(board[1000, 1000] == testAgainst);
+        }
+
+        [TestMethod]
+        public void CreateABoardAndGetANeighborThatHasNotYetBenCreatedShouldAssertTrueIfAnArrayOfNullCardsIsReturned()
+        {
+            Board board = new Board();
+            Card[,] returned = board.GetCardAndNeighbors(0, 0);
+            Card[,] testAgainst = new Card[,] { { null, null, null }, { null, null, null }, { null, null, null } };
+
+            bool arraysIdentical = false;
+
+            for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
+                    arraysIdentical = returned[x, y] == testAgainst[x, y];
+
+            Assert.IsTrue(arraysIdentical);
+        }
+
+        [TestMethod]
+        public void CreateABoardAndGetANeighborThatHasBeenCreatedShouldAssertTrueIfArrayReturnedHasOneNonNullCardInTheCenter()
+        {
+            Board board = new Board();
+            Card centralPlacedCard = new Card(Card.Type.FIRE);
+            Card[,] returned;
+            Card[,] testAgainst = new Card[,] { { null, null, null }, { null, centralPlacedCard, null }, { null, null, null } };
+
+            board.AddCard(centralPlacedCard, 0, 0);
+            returned = board.GetCardAndNeighbors(0, 0);
+
+            bool arraysIdentical = false;
+
+            for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
+                    arraysIdentical = returned[x, y] == testAgainst[x, y];
+
+            Assert.IsTrue(arraysIdentical);
+        }
     }
 }
