@@ -22,11 +22,9 @@ namespace ZaWarado
     public partial class MainWindow : Window
     {
 
-        private Style ButtonStyle = new Style();
         public MainWindow()
         {
             InitializeComponent();
-            SetUpStyle();
             DisplayHand();
             
         }
@@ -42,7 +40,7 @@ namespace ZaWarado
                 newBtn.MaxWidth = 120;
                 newBtn.MinHeight = 60;
                 newBtn.MinWidth = 120;
-
+                newBtn.Style = this.FindResource("MyButton") as Style;
                 var brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
                 newBtn.Background = brush;
@@ -53,11 +51,7 @@ namespace ZaWarado
         {
 
         }
-        private void SetUpStyle()
-        {
-            ButtonStyle.TargetType = typeof(Button);
-            ButtonStyle.Setters.Add(new Setter(new DependencyProperty(OverridesDefaultStyle), true));
-        }
+
         //Set button background code
 
         //var brush = new ImageBrush();
