@@ -21,13 +21,14 @@ namespace ZaWarado
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-        
+
+        private Style ButtonStyle = new Style();
         public MainWindow()
         {
             InitializeComponent();
+            SetUpStyle();
             DisplayHand();
- 
+            
         }
 
         private void DisplayHand()
@@ -36,14 +37,26 @@ namespace ZaWarado
             for (int i = 0; i < handSize; i++)
             {
                 Button newBtn = new Button();
-                newBtn.Content = i.ToString();
                 newBtn.Name = "Card" + i.ToString();
                 newBtn.MaxHeight = 200;
                 newBtn.MaxWidth = 120;
                 newBtn.MinHeight = 60;
                 newBtn.MinWidth = 120;
+
+                var brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
+                newBtn.Background = brush;
                 Hand.Children.Add(newBtn);
             }
+        }
+        private void SetUpBoard()
+        {
+
+        }
+        private void SetUpStyle()
+        {
+            ButtonStyle.TargetType = typeof(Button);
+            ButtonStyle.Setters.Add(new Setter(new DependencyProperty(OverridesDefaultStyle), true));
         }
         //Set button background code
 
