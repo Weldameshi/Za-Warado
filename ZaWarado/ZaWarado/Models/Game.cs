@@ -266,7 +266,7 @@ namespace ZaWarado.Models
                                 DiscardCard(Card.Type.PLANT);
                                 break;
                             case Card.Type.MOUNTAIN:
-                                switch (Card.Type.FIRE)//Board.GetCard(xPosition + 1, yPosition + 1).type)
+                                switch (Card.Type.WATER)//Board.GetCard(xPosition + 1, yPosition + 1).type)
                                 {
                                     case Card.Type.WATER:
                                         BioPoints += 3;
@@ -836,17 +836,23 @@ namespace ZaWarado.Models
                         switch (aboveCard.type)
                         {
                             case Card.Type.PLANT:
-                                CheckObtainedHabitats("Mountain")
+                                CheckObtainedHabitats("Tree Mountain", 1);
                                 break;
                             case Card.Type.WATER:
+                                CyclePoints += 2;
+                                CheckObtainedHabitats("Waterfalls & Mountain Streams", 2);
                                 break;
                             case Card.Type.WIND:
+                                HazardPoints += 1;
+                                CyclePoints -= 2;
                                 break;
                             case Card.Type.FIRE:
-                                break;
-                            case Card.Type.MOUNTAIN:
+                                HeatPoints += 2;
+                                HazardPoints += 6;
+                                CyclePoints -= 3;
                                 break;
                             case Card.Type.PLAINS:
+                                CheckObtainedHabitats("Plateau", 1);
                                 break;
                             default:
                                 break;
@@ -859,6 +865,16 @@ namespace ZaWarado.Models
                         switch (rightCard.type)
                         {
                             case Card.Type.PLANT:
+                                switch (aboveCard.type)
+                                {
+                                    case Card.Type.WATER:
+                                        BioPoints += 3;
+                                        break;
+                                    case Card.Type.FIRE:
+                                    case Card.Type.WIND:
+                                        BioPoints -= 1;
+                                        break;
+                                }
                                 break;
                             case Card.Type.WATER:
                                 break;
@@ -866,9 +882,22 @@ namespace ZaWarado.Models
                                 break;
                             case Card.Type.FIRE:
                                 break;
-                            case Card.Type.MOUNTAIN:
-                                break;
                             case Card.Type.PLAINS:
+                                switch (aboveCard.type)
+                                {
+                                    case Card.Type.PLANT:
+                                        HazardPoints -= 1;
+                                        break;
+                                    case Card.Type.WATER:
+                                        BioPoints += 2;
+                                        CheckObtainedHabitats("Jungle Territory", 4);
+                                        break;
+                                    case Card.Type.WIND:
+                                        BioPoints += 1;
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             default:
                                 break;
@@ -891,6 +920,8 @@ namespace ZaWarado.Models
                             case Card.Type.MOUNTAIN:
                                 break;
                             case Card.Type.PLAINS:
+                                CyclePoints += 2;
+                                CheckObtainedHabitats("Wide Tunnels", 5);
                                 break;
                             default:
                                 break;
@@ -903,6 +934,16 @@ namespace ZaWarado.Models
                         switch (leftCard.type)
                         {
                             case Card.Type.PLANT:
+                                switch (aboveCard.type)
+                                {
+                                    case Card.Type.WATER:
+                                        BioPoints += 3;
+                                        break;
+                                    case Card.Type.FIRE:
+                                    case Card.Type.WIND:
+                                        BioPoints -= 1;
+                                        break;
+                                }
                                 break;
                             case Card.Type.WATER:
                                 break;
@@ -913,6 +954,21 @@ namespace ZaWarado.Models
                             case Card.Type.MOUNTAIN:
                                 break;
                             case Card.Type.PLAINS:
+                                switch (aboveCard.type)
+                                {
+                                    case Card.Type.PLANT:
+                                        HazardPoints -= 1;
+                                        break;
+                                    case Card.Type.WATER:
+                                        BioPoints += 2;
+                                        CheckObtainedHabitats("Jungle Territory", 4);
+                                        break;
+                                    case Card.Type.WIND:
+                                        BioPoints += 1;
+                                        break;
+                                    default:
+                                        break;
+                                }
                                 break;
                             default:
                                 break;
