@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace ZaWarado.Models
 {
@@ -45,9 +46,34 @@ namespace ZaWarado.Models
         {
             get
             {
-                // Add code later for loading in an image if it hasn't been loaded yet.
+                // Add code later for loading in an image if it hasn't been loaded yet
+                int typeDex = (int)type;
+                if (cardImages[typeDex] == null)
+                {
+                    switch (typeDex)
+                    {
+                        case 0:
+                            cardImages[0] = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
+                            break;
+                        case 1:
+                            cardImages[1] = new BitmapImage(new Uri("../../Assets/Images/Water.png", UriKind.Relative));
+                            break;
+                        case 2:
+                            cardImages[2] = new BitmapImage(new Uri("../../Assets/Images/Wind.png", UriKind.Relative));
+                            break;
+                        case 3:
+                            cardImages[3] = new BitmapImage(new Uri("../../Assets/Images/Fire.png", UriKind.Relative));
+                            break;
+                        case 4:
+                            cardImages[4] = new BitmapImage(new Uri("../../Assets/Images/Mountain.png", UriKind.Relative));
+                            break;
+                        case 5:
+                            cardImages[5] = new BitmapImage(new Uri("../../Assets/Images/Plains.png", UriKind.Relative));
+                            break;
+                    }
+                }
 
-                return cardImages[(int)type];
+                return cardImages[typeDex];
             }
         }
 
