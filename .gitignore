@@ -360,3 +360,6 @@ MigrationBackup/
 FodyWeavers.xsd
 *.lock
 *.ide
+*.lref
+*.cache
+ZaWarado/.vs/ZaWarado/v16/.suo

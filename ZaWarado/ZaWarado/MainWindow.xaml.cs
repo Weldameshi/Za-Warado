@@ -23,6 +23,8 @@ namespace ZaWarado
     {
         Style btnStyle;
         Grid boardDisplay;
+        Button currentCard;
+        Board tempBoard = new Board();
 
         public MainWindow()
         {
@@ -44,11 +46,31 @@ namespace ZaWarado
                 newBtn.MinHeight = 60;
                 newBtn.MinWidth = 120;
                 newBtn.Style = btnStyle;
+                newBtn.Click += HandClick;
                 var brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
                 newBtn.Background = brush;
                 Hand.Children.Add(newBtn);
             }
+        }
+
+        private void HandClick(object sender, RoutedEventArgs e)
+        {
+            
+            currentCard = sender as Button;
+            for (int i = 0; i < ; i++)
+            {
+
+            }
+            if(btn != null)
+            {
+                Hand.Children.Remove(btn);
+                boardDisplay.Children.Add(btn);
+
+            }
+
+
+
         }
         private void SetUpBoard()
         {
@@ -58,7 +80,12 @@ namespace ZaWarado
             Grid.SetColumn(boardDisplay, 1);
             boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
             boardDisplay.RowDefinitions.Add(new RowDefinition());
+            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
+            boardDisplay.RowDefinitions.Add(new RowDefinition()); 
+            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
+            boardDisplay.RowDefinitions.Add(new RowDefinition());
         }
+        
 
         //Set button background code
 
