@@ -28,7 +28,7 @@ namespace ZaWarado.Models
         }
 
         private Dictionary<Coord, Card> board = null;
-        public Dictionary<Coord, Card> Board { get => board; }
+        internal Dictionary<Coord, Card> GameBoard { get => board; }
 
         /// <summary>
         /// Get the instance of card at the given location on the board
