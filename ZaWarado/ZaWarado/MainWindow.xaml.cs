@@ -60,7 +60,17 @@ namespace ZaWarado
             currentCard = sender as Button;
             foreach (var item in tempBoard.GameBoard)
             {
-                tempBoard.GetCardAndNeighbors(item.Key.x,item.Key.y);
+                Board.Coord itemCoord = item.Key;
+                Dictionary<Board.Coord, Card> itemNeighbors = tempBoard.GetCardAndNeighbors(item.Key.x,item.Key.y);
+
+                if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y + 1))] is null)
+                {
+                    //do true logic (no card is placed above this card]
+                    
+                }
+
+                //... 3 more times
+
             }
             //if(btn != null)
             //{
