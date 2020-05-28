@@ -77,6 +77,46 @@ namespace ZaWarado.Models
             board[loc] = card;
         }
 
+        /// <summary>
+        /// Return a card and it's parallel neighbors.
+        /// </summary>
+        /// <param name="x">Central card X location</param>
+        /// <param name="y">Central card Y location</param>
+        /// <returns>A 2D collection of non-null neighbors where applicable</returns>
+        public Card[,] GetCardAndNeighborsArray(int x, int y)
+        {
+            if (board is null)
+                return null;
+
+            Card[,] neighbors = new Card[3, 3];
+            Coord loc = new Coord(x, y);
+
+            bool temporaryAdd = false;
+            Coord temporaryAddCoord = default;
+
+            if (!board.ContainsKey(loc))
+            {
+                temporaryAdd = true;
+                temporaryAddCoord = loc;
+                board.Add(loc, null);
+            }
+
+            /* X: 0 1 2 - Y: 0 0 0
+             * X: 0 1 2 - Y: 1 1 1
+             * X: 0 1 2 - Y: 2 2 2
+             */
+
+            neighbors[1, 1] = board[loc]; Coord next = new Coord(x, y - 1);
+            neighbors[1, 0] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x, y + 1);
+            neighbors[1, 2] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x - 1, y);
+            neighbors[0, 1] = board.ContainsKey(next) ? board[next] : null; next = new Coord(x + 1, y);
+            neighbors[2, 1] = board.ContainsKey(next) ? board[next] : null;
+
+            if (temporaryAdd) board.Remove(temporaryAddCoord);
+
+            return neighbors;
+        }
+
         ///// <summary>
         ///// Return a card and it's parallel neighbors.
         ///// </summary>
