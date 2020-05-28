@@ -25,6 +25,8 @@ namespace ZaWarado
         Grid boardDisplay;
         Button currentCard;
         Board tempBoard = new Board();
+        Card tempCard = new Card(Card.Type.WIND);
+        List<Button> tempButtons = new List<Button>();
 
         public MainWindow()
         {
@@ -48,7 +50,7 @@ namespace ZaWarado
                 newBtn.Style = btnStyle;
                 newBtn.Click += HandClick;
                 var brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Plant.png", UriKind.Relative));
+                brush.ImageSource = tempCard.imageFile;
                 newBtn.Background = brush;
                 Hand.Children.Add(newBtn);
             }
@@ -56,33 +58,85 @@ namespace ZaWarado
 
         private void HandClick(object sender, RoutedEventArgs e)
         {
-            
+
             currentCard = sender as Button;
-            foreach (var item in tempBoard.GameBoard)
+            if (tempBoard.GameBoard.Count == 0)
             {
-                Board.Coord itemCoord = item.Key;
-                Dictionary<Board.Coord, Card> itemNeighbors = tempBoard.GetCardAndNeighbors(item.Key.x,item.Key.y);
-
-                if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y + 1))] is null)
-                {
-                    //do true logic (no card is placed above this card]
-                    
-                }
-
-                //... 3 more times
-
+                PlaceCard(7, 7);
             }
+            else
+            {
+                foreach (var item in tempBoard.GameBoard)
+                {
+                    Board.Coord itemCoord = item.Key;
+                    Dictionary<Board.Coord, Card> itemNeighbors = tempBoard.GetCardAndNeighbors(item.Key.x, item.Key.y);
+
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y - 1))] is null)
+                    {
+                        //do true logic (no card is placed above this card]
+                        CreateTempButton(item.Key.x, item.Key.y - 1);
+                    }
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y +1))] is null)
+                    {
+                        //do true logic (no card is placed above this card]
+                        CreateTempButton(item.Key.x, item.Key.y + 1);
+                    }
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x+1, itemCoord.y))] is null)
+                    {
+                        //do true logic (no card is placed above this card]
+                        CreateTempButton(item.Key.x+1, item.Key.y);
+                    }
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x-1, itemCoord.y))] is null)
+                    {
+                        //do true logic (no card is placed above this card]
+                        CreateTempButton(item.Key.x-1, item.Key.y);
+                    }
+
+                    //... 3 more times
+
+                }
+            }
+
             //if(btn != null)
             //{
             //    Hand.Children.Remove(btn);
             //    boardDisplay.Children.Add(btn);
 
             //}
-
-
-
         }
-        private void SetUpBoard()
+        private void CreateTempButton(int x, int y)
+        {
+            Button newBtn = new Button();
+            newBtn.Tag = "";
+            newBtn.Style = btnStyle;
+            var brush = new SolidColorBrush(Color.FromArgb(125, 255, 165, 0));
+            newBtn.Background = brush;
+            boardDisplay.Children.Add(newBtn);
+            Grid.SetColumn(newBtn, x);
+            Grid.SetRow(newBtn, y);
+            newBtn.Click += PlaceHolderClick;
+            tempButtons.Add(newBtn);
+        }
+        private void PlaceCard(int x, int y)
+        {
+            Hand.Children.Remove(currentCard);
+            boardDisplay.Children.Add(currentCard);
+            Grid.SetColumn(currentCard, x);
+            Grid.SetRow(currentCard, y);
+            tempBoard.AddCard(tempCard, x, y);
+        }
+        private void PlaceHolderClick(object sender, RoutedEventArgs e)
+        {
+            Button b = sender as Button;
+            PlaceCard(Grid.GetColumn(b), Grid.GetRow(b));
+            currentCard = null;
+            foreach(Button btn in tempButtons)
+            {
+                boardDisplay.Children.Remove(btn);
+            }
+            tempButtons.Clear();
+        }
+            private void SetUpBoard()
         {
             boardDisplay = new Grid();
             GameArea.Children.Add(boardDisplay);
@@ -94,9 +148,8 @@ namespace ZaWarado
                 boardDisplay.RowDefinitions.Add(new RowDefinition());
             }
 
-            
         }
-        
+
 
         //Set button background code
 
