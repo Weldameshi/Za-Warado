@@ -27,7 +27,11 @@ namespace ZaWarado.Models
             }
         }
 
-        Dictionary<Coord, Card> board = null;
+        private Dictionary<Coord, Card> board = null;
+        /// <summary>
+        /// The underlying storage mechanism that this board class uses to manage the Cards it holds
+        /// </summary>
+        internal Dictionary<Coord, Card> GameBoard { get => board; }
 
         /// <summary>
         /// Get the instance of card at the given location on the board
