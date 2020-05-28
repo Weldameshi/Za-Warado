@@ -58,16 +58,16 @@ namespace ZaWarado
         {
             
             currentCard = sender as Button;
-            for (int i = 0; i < ; i++)
-            {
+            //foreach (var item in tempBoard)
+            //{
 
-            }
-            if(btn != null)
-            {
-                Hand.Children.Remove(btn);
-                boardDisplay.Children.Add(btn);
+            //}
+            //if(btn != null)
+            //{
+            //    Hand.Children.Remove(btn);
+            //    boardDisplay.Children.Add(btn);
 
-            }
+            //}
 
 
 
