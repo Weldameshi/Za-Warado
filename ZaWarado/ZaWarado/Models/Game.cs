@@ -13,7 +13,7 @@ namespace ZaWarado.Models
     public class Game
     {
         public static Game GameSingleton { get; set; }
-        private Board Board { get; set; }
+        public Board Board { get; set; }
         private int TurnNumber { get; set; }
 
 
@@ -84,7 +84,7 @@ namespace ZaWarado.Models
             GameSingleton = this;
         }
         /// <summary>
-        /// Starts a new game by resetting all the values to their default, setting up the deck, and starting the firstTurn.
+        /// Starts a new game by resetting all the values to their default and setting up the deck.
         /// </summary>
         public void StartGame()
         {
@@ -237,15 +237,7 @@ namespace ZaWarado.Models
             for (int i = 0; i < numOfCards; i++)
             {
                 Card card = Deck.Pop();
-                if (card == null)
-                {
-                    //throw new WTF exception
-                    i--;
-                }
-                else
-                {
-                    PlayerHand.Add(card);
-                }
+                PlayerHand.Add(card);
             }
         }
 
@@ -1268,8 +1260,9 @@ namespace ZaWarado.Models
             if (PlayerHand.Count == 0) return;
             if (PlayerHand.FindIndex(card => card.type == type) > -1)
             {
-                PlayerHand.RemoveAt(PlayerHand.FindIndex(card => card.type == type));
-
+                Card card = PlayerHand.First(c => c.type == type);
+                Discard.Push(card);
+                PlayerHand.Remove(card);
             }
         }
     }
