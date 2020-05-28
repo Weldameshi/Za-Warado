@@ -58,10 +58,10 @@ namespace ZaWarado
         {
             
             currentCard = sender as Button;
-            //foreach (var item in tempBoard)
-            //{
-
-            //}
+            foreach (var item in tempBoard.GameBoard)
+            {
+                tempBoard.GetCardAndNeighbors(item.Key.x,item.Key.y);
+            }
             //if(btn != null)
             //{
             //    Hand.Children.Remove(btn);
@@ -78,12 +78,13 @@ namespace ZaWarado
             GameArea.Children.Add(boardDisplay);
             Grid.SetRow(boardDisplay, 1);
             Grid.SetColumn(boardDisplay, 1);
-            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
-            boardDisplay.RowDefinitions.Add(new RowDefinition());
-            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
-            boardDisplay.RowDefinitions.Add(new RowDefinition()); 
-            boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
-            boardDisplay.RowDefinitions.Add(new RowDefinition());
+            for (int i = 0; i < 15; i++)
+            {
+                boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
+                boardDisplay.RowDefinitions.Add(new RowDefinition());
+            }
+
+            
         }
         
 
