@@ -190,7 +190,14 @@ namespace ZaWarado
                 boardDisplay.ColumnDefinitions.Add(new ColumnDefinition());
                 boardDisplay.RowDefinitions.Add(new RowDefinition());
             }
-
+            var brush1 = new ImageBrush();
+            brush1.ImageSource = new BitmapImage(new Uri("../../Assets/Images/Mars.jpg", UriKind.Relative));
+            boardDisplay.Background = brush1;
+            WorldScore.Style = btnStyle;
+            var brush2 = new SolidColorBrush(Color.FromArgb(125, 255, 165, 0));
+            WorldScore.Background = brush2;
+            EndTurn.Style = btnStyle;
+            EndTurn.Background = brush2;
         }
 
 
