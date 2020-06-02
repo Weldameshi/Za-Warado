@@ -183,7 +183,6 @@ namespace ZaWarado.Models
         public void EndTurn()
         {
             DiscardHand();
-            TallyScore();
             Board.GameBoard.Clear();
             if (++TurnNumber > 10)
             {
@@ -1189,6 +1188,8 @@ namespace ZaWarado.Models
                     //Shouldn't ever be hit for any reason.
                     break;
             }
+            TallyScore();
+
         }
 
         /// <summary>
