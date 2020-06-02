@@ -137,6 +137,7 @@ namespace ZaWarado
         {
             game.EndTurn();
             boardDisplay.Children.Clear();
+            game.StartTurn();
             DisplayHand();
         }
         private void PlaceHolderClick(object sender, RoutedEventArgs e)
