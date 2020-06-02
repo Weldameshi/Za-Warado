@@ -184,6 +184,7 @@ namespace ZaWarado.Models
         {
             DiscardHand();
             TallyScore();
+            Board.GameBoard.Clear();
             if (++TurnNumber > 10)
             {
                 EndGame();
