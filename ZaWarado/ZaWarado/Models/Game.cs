@@ -183,6 +183,7 @@ namespace ZaWarado.Models
         public void EndTurn()
         {
             DiscardHand();
+            TallyScore();
             if (++TurnNumber > 10)
             {
                 EndGame();
@@ -191,7 +192,7 @@ namespace ZaWarado.Models
 
         private void EndGame()
         {
-            TallyScore();
+            IsWon = WorldScore >= 100;
         }
 
         private void TallyScore()
@@ -206,8 +207,6 @@ namespace ZaWarado.Models
                          scoreFromHeatPoints +
                          scoreFromCyclePoints +
                          scoreFromHabitatPoints;
-
-            IsWon = WorldScore >= 100;
 
             int numOfCollectedHabitats = ObtainedHabitats.Count(habitat => habitat.Value);
         }
