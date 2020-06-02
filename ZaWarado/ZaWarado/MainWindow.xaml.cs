@@ -125,14 +125,33 @@ namespace ZaWarado
         private void PlaceCard(int x, int y)
         {
             Hand.Children.Remove(currentCardButton);
-            boardDisplay.Children.Add(currentCardButton);
-            currentCardButton.IsEnabled = false;
-            Grid.SetColumn(currentCardButton, x);
-            Grid.SetRow(currentCardButton, y);
             game.PlaceCard(currentCard, x, y);
             game.PlayerHand.Remove(currentCard);
             DisplayHand();
             WorldScore.Content = game.WorldScore;
+            RefreshBoard();
+        }
+
+        private void RefreshBoard()
+        {
+            boardDisplay.Children.Clear();
+            foreach (var card in game.Board.GameBoard)
+            {
+                Button newBtn = new Button();
+                newBtn.MaxHeight = 200;
+                newBtn.MaxWidth = 120;
+                newBtn.MinHeight = 60;
+                newBtn.MinWidth = 120;
+                newBtn.Style = btnStyle;
+                newBtn.Click += HandClick;
+                var brush = new ImageBrush();
+                brush.ImageSource = card.Value.imageFile;
+                newBtn.Background = brush;
+                newBtn.IsEnabled = false;
+                boardDisplay.Children.Add(newBtn);
+                Grid.SetColumn(newBtn, card.Key.x);
+                Grid.SetRow(newBtn, card.Key.y);
+            }
         }
         private void EndTurnClick(object sender, RoutedEventArgs e)
         {

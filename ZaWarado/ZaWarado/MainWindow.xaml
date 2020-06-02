@@ -39,7 +39,7 @@
             <RowDefinition Height="75"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
-        <Label x:Name="WorldScore" Grid.Column="1" Grid.Row="0"></Label>
+        <Label x:Name="WorldScore" Grid.Column="1" Grid.Row="0" FontSize="30"></Label>
         <StackPanel x:Name="Hand" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto" Grid.Column="1" Grid.Row="2" >
         </StackPanel>
         <Button x:Name="EndTurn" Grid.Column="2" Grid.Row="2" Content="End Turn" Click="EndTurnClick"></Button>
