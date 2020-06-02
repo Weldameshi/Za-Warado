@@ -264,6 +264,7 @@ namespace ZaWarado.Models
         public void PlaceCard(Card placedCard, int xPosition, int yPosition)
         {
             Board.AddCard(placedCard, xPosition, yPosition);
+            DiscardCard(placedCard);
 
             //Gets the surrounding cards of the placed card.
             Card aboveCard = Board[xPosition, yPosition - 1];
@@ -1263,6 +1264,12 @@ namespace ZaWarado.Models
                 Discard.Push(card);
                 PlayerHand.Remove(card);
             }
+        }
+
+        private void DiscardCard(Card card)
+        {
+            Discard.Push(card);
+            PlayerHand.Remove(card);
         }
     }
 }
