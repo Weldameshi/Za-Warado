@@ -126,6 +126,7 @@ namespace ZaWarado
         {
             Hand.Children.Remove(currentCardButton);
             boardDisplay.Children.Add(currentCardButton);
+            currentCardButton.IsEnabled = false;
             Grid.SetColumn(currentCardButton, x);
             Grid.SetRow(currentCardButton, y);
             game.PlaceCard(currentCard, x, y);
