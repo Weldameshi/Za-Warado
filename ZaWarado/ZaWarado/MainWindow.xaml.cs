@@ -23,26 +23,29 @@ namespace ZaWarado
     {
         Style btnStyle;
         Grid boardDisplay;
-        Button currentCard;
-        Board tempBoard = new Board();
-        Card tempCard = new Card(Card.Type.WIND);
+        Button currentCardButton;
+        Card currentCard;
         List<Button> tempButtons = new List<Button>();
+        Game game = new Game();
 
         public MainWindow()
         {
             InitializeComponent();
             btnStyle = this.FindResource("ButtonStyle") as Style;
+            game.StartGame();
+            game.StartTurn();
             DisplayHand();
             SetUpBoard();
         }
 
         private void DisplayHand()
         {
-            int handSize = 5;
+            Hand.Children.Clear();
+            int handSize = game.PlayerHand.Count;
             for (int i = 0; i < handSize; i++)
             {
                 Button newBtn = new Button();
-                newBtn.Name = "Card" + i.ToString();
+                newBtn.Name = "Card_" + i.ToString();
                 newBtn.MaxHeight = 200;
                 newBtn.MaxWidth = 120;
                 newBtn.MinHeight = 60;
@@ -50,7 +53,7 @@ namespace ZaWarado
                 newBtn.Style = btnStyle;
                 newBtn.Click += HandClick;
                 var brush = new ImageBrush();
-                brush.ImageSource = tempCard.imageFile;
+                brush.ImageSource = game.PlayerHand[i].imageFile;
                 newBtn.Background = brush;
                 Hand.Children.Add(newBtn);
             }
@@ -59,17 +62,19 @@ namespace ZaWarado
         private void HandClick(object sender, RoutedEventArgs e)
         {
 
-            currentCard = sender as Button;
-            if (tempBoard.GameBoard.Count == 0)
+            currentCardButton = sender as Button;
+            string name = currentCardButton.Name.Split('_')[1];
+            currentCard = game.PlayerHand[int.Parse(name)];
+            if (game.Board.GameBoard.Count == 0)
             {
                 PlaceCard(7, 7);
             }
             else
             {
-                foreach (var item in tempBoard.GameBoard)
+                foreach (var item in game.Board.GameBoard)
                 {
                     Board.Coord itemCoord = item.Key;
-                    Dictionary<Board.Coord, Card> itemNeighbors = tempBoard.GetCardAndNeighbors(item.Key.x, item.Key.y);
+                    Dictionary<Board.Coord, Card> itemNeighbors = game.Board.GetCardAndNeighbors(item.Key.x, item.Key.y);
 
                     if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y - 1))] is null)
                     {
@@ -119,17 +124,19 @@ namespace ZaWarado
         }
         private void PlaceCard(int x, int y)
         {
-            Hand.Children.Remove(currentCard);
-            boardDisplay.Children.Add(currentCard);
-            Grid.SetColumn(currentCard, x);
-            Grid.SetRow(currentCard, y);
-            tempBoard.AddCard(tempCard, x, y);
+            Hand.Children.Remove(currentCardButton);
+            boardDisplay.Children.Add(currentCardButton);
+            Grid.SetColumn(currentCardButton, x);
+            Grid.SetRow(currentCardButton, y);
+            game.PlaceCard(currentCard, x, y);
+            game.PlayerHand.Remove(currentCard);
+            DisplayHand();
         }
         private void PlaceHolderClick(object sender, RoutedEventArgs e)
         {
             Button b = sender as Button;
             PlaceCard(Grid.GetColumn(b), Grid.GetRow(b));
-            currentCard = null;
+            currentCardButton = null;
             foreach(Button btn in tempButtons)
             {
                 boardDisplay.Children.Remove(btn);
