@@ -27,6 +27,7 @@ namespace ZaWarado
         Card currentCard;
         List<Button> tempButtons = new List<Button>();
         Game game = new Game();
+        bool placmentButtonsOn = false;
 
         public MainWindow()
         {
@@ -69,7 +70,7 @@ namespace ZaWarado
             {
                 PlaceCard(7, 7);
             }
-            else
+            else if (!placmentButtonsOn)
             {
                 foreach (var item in game.Board.GameBoard)
                 {
@@ -81,49 +82,56 @@ namespace ZaWarado
                         //do true logic (no card is placed above this card]
                         CreateTempButton(item.Key.x, item.Key.y - 1);
                     }
-                    if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y +1))] is null)
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x, itemCoord.y + 1))] is null)
                     {
                         //do true logic (no card is placed above this card]
                         CreateTempButton(item.Key.x, item.Key.y + 1);
                     }
-                    if (itemNeighbors[(new Board.Coord(itemCoord.x+1, itemCoord.y))] is null)
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x + 1, itemCoord.y))] is null)
                     {
                         //do true logic (no card is placed above this card]
-                        CreateTempButton(item.Key.x+1, item.Key.y);
+                        CreateTempButton(item.Key.x + 1, item.Key.y);
                     }
-                    if (itemNeighbors[(new Board.Coord(itemCoord.x-1, itemCoord.y))] is null)
+                    if (itemNeighbors[(new Board.Coord(itemCoord.x - 1, itemCoord.y))] is null)
                     {
                         //do true logic (no card is placed above this card]
-                        CreateTempButton(item.Key.x-1, item.Key.y);
+                        CreateTempButton(item.Key.x - 1, item.Key.y);
                     }
 
                     //... 3 more times
-
+                    placmentButtonsOn = true;
                 }
             }
 
-            //if(btn != null)
-            //{
-            //    Hand.Children.Remove(btn);
-            //    boardDisplay.Children.Add(btn);
-
-            //}
         }
         private void CreateTempButton(int x, int y)
         {
-            Button newBtn = new Button();
-            newBtn.Tag = "";
-            newBtn.Style = btnStyle;
-            var brush = new SolidColorBrush(Color.FromArgb(125, 255, 165, 0));
-            newBtn.Background = brush;
-            boardDisplay.Children.Add(newBtn);
-            Grid.SetColumn(newBtn, x);
-            Grid.SetRow(newBtn, y);
-            newBtn.Click += PlaceHolderClick;
-            tempButtons.Add(newBtn);
+            bool tempButtonAlreadyExits = false;
+            foreach (Button b in tempButtons)
+            {
+                if (Grid.GetRow(b) == y && Grid.GetColumn(b) == x)
+                {
+                    tempButtonAlreadyExits = true;
+                }
+            }
+            if (!tempButtonAlreadyExits)
+            {
+                Button newBtn = new Button();
+                newBtn.Tag = "";
+                newBtn.Style = btnStyle;
+                var brush = new SolidColorBrush(Color.FromArgb(125, 255, 165, 0));
+                newBtn.Background = brush;
+                boardDisplay.Children.Add(newBtn);
+                Grid.SetColumn(newBtn, x);
+                Grid.SetRow(newBtn, y);
+                newBtn.Click += PlaceHolderClick;
+                tempButtons.Add(newBtn);
+            }
+
         }
         private void PlaceCard(int x, int y)
         {
+            placmentButtonsOn = false;
             Hand.Children.Remove(currentCardButton);
             game.PlaceCard(currentCard, x, y);
             game.PlayerHand.Remove(currentCard);
@@ -165,13 +173,13 @@ namespace ZaWarado
             Button b = sender as Button;
             PlaceCard(Grid.GetColumn(b), Grid.GetRow(b));
             currentCardButton = null;
-            foreach(Button btn in tempButtons)
+            foreach (Button btn in tempButtons)
             {
                 boardDisplay.Children.Remove(btn);
             }
             tempButtons.Clear();
         }
-            private void SetUpBoard()
+        private void SetUpBoard()
         {
             boardDisplay = new Grid();
             GameArea.Children.Add(boardDisplay);
