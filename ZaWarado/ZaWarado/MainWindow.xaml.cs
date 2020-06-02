@@ -132,6 +132,7 @@ namespace ZaWarado
             game.PlaceCard(currentCard, x, y);
             game.PlayerHand.Remove(currentCard);
             DisplayHand();
+            WorldScore.Content = game.WorldScore;
         }
         private void EndTurnClick(object sender, RoutedEventArgs e)
         {
