@@ -132,6 +132,12 @@ namespace ZaWarado
             game.PlayerHand.Remove(currentCard);
             DisplayHand();
         }
+        private void EndTurnClick(object sender, RoutedEventArgs e)
+        {
+            game.EndTurn();
+            boardDisplay.Children.Clear();
+            DisplayHand();
+        }
         private void PlaceHolderClick(object sender, RoutedEventArgs e)
         {
             Button b = sender as Button;

@@ -39,9 +39,9 @@
             <RowDefinition Height="75"/>
             <RowDefinition Height="10"/>
         </Grid.RowDefinitions>
+
         <StackPanel x:Name="Hand" HorizontalAlignment="Center" Orientation="Horizontal" Width="Auto" Grid.Column="1" Grid.Row="2" >
         </StackPanel>
-
-        <Canvas x:Name="C"></Canvas>
+        <Button x:Name="EndTurn" Grid.Column="2" Grid.Row="2" Content="End Turn"></Button>
     </Grid>
 </Window>
