@@ -148,8 +148,8 @@ namespace ZaWarado
                 Button newBtn = new Button();
                 newBtn.MaxHeight = 200;
                 newBtn.MaxWidth = 120;
-                newBtn.MinHeight = 60;
-                newBtn.MinWidth = 120;
+                newBtn.MinHeight = 20;
+                newBtn.MinWidth = 20;
                 newBtn.Style = btnStyle;
                 newBtn.Click += HandClick;
                 var brush = new ImageBrush();
@@ -198,6 +198,37 @@ namespace ZaWarado
             WorldScore.Background = brush2;
             EndTurn.Style = btnStyle;
             EndTurn.Background = brush2;
+            RestartButton.Style = btnStyle;
+            RestartButton.Background = brush2;
+            Color background = Color.FromRgb(166,56,46);
+            GameArea.Background = new SolidColorBrush(background);
+
+            Color solidLineColor = Color.FromRgb(64, 6, 1);
+            Label solidLine = new Label();
+            solidLine.Background = new SolidColorBrush(solidLineColor);
+            GameArea.Children.Add(solidLine);
+            Grid.SetRow(solidLine, 4);
+            Grid.SetColumnSpan(solidLine, 3);
+            Grid.SetColumn(solidLine, 0);
+            solidLine.IsEnabled = false;
+            Label solidLine2 = new Label();
+            solidLine2.Background = new SolidColorBrush(solidLineColor);
+            GameArea.Children.Add(solidLine2);
+            Grid.SetRow(solidLine2, 2);
+            Grid.SetColumnSpan(solidLine2, 3);
+            Grid.SetColumn(solidLine2, 0);
+        }
+        public void Restart()
+        {
+            game.StartGame();
+            game.StartTurn();
+            DisplayHand();
+            SetUpBoard();
+            WorldScore.Content = game.WorldScore;
+        }
+        private void RestartClick(object sender, RoutedEventArgs e)
+        {
+            Restart();
         }
 
 
