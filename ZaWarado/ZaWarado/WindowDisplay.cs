@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace ZaWarado
 {
@@ -7,8 +8,25 @@ namespace ZaWarado
         public static Window Current { get; } = null;
         public static bool ResumeExistingGame { get; set; } = false;
 
+        static bool initialized = false;
+
         private static Window mainMenu = new StartWindow();
         private static Window gameMenu = new MainWindow();
+
+        public static void Initialize()
+        {
+            if (!initialized)
+            {
+                gameMenu.Closed += ClosedGameWindow;
+                initialized = true;
+            }
+        }
+
+        static void ClosedGameWindow(object sender, EventArgs args)
+        {
+            gameMenu = new MainWindow();
+            gameMenu.Closed += ClosedGameWindow;
+        }
 
         public static void ShowMainMenu()
         {
