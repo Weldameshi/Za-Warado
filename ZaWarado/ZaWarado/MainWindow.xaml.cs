@@ -31,6 +31,7 @@ namespace ZaWarado
 
         public MainWindow()
         {
+            WindowDisplay.Current = this;
             InitializeComponent();
             btnStyle = this.FindResource("ButtonStyle") as Style;
             game.StartGame();
