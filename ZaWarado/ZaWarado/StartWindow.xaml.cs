@@ -11,6 +11,7 @@ namespace ZaWarado
         public StartWindow()
         {
             InitializeComponent();
+            ResumeExistingGame.IsChecked = true;
         }
 
         private void Start_Click(object sender, RoutedEventArgs e)
