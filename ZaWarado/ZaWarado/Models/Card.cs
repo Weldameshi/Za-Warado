@@ -22,12 +22,12 @@ namespace ZaWarado.Models
         /// </summary>
         public enum Type
         {
-            PLANT,
-            WATER,
-            WIND,
-            FIRE,
-            MOUNTAIN,
-            PLAINS
+            PLANT = 0,
+            WATER = 1,
+            WIND = 2,
+            FIRE = 3,
+            MOUNTAIN = 4,
+            PLAINS = 5
         }
 
         /// <summary>
@@ -83,6 +83,10 @@ namespace ZaWarado.Models
         /// <param name="type">The type of Card to create.</param>
         public Card(Type type)
         {
+            if ((int)type > 5 || type < 0)
+            {
+                throw new ArgumentOutOfRangeException("Cannot create a Card with an invalid type.");
+            }
             this.type = type;
         }
 

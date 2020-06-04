@@ -144,31 +144,58 @@ namespace ZaWarado.Models
             //Declares a new random to generate a card from.
             Random rng = new Random();
 
-            //Used to keep track of how many of each card is created.
-            //As of now, there can only be 10 of each card but I'm sure this will change.
-            int[] generatedCards = new int[6];
-
-            //For loop to generate a 60 cards. Again will likely be changed.
-            for (int i = 0; i < 60; i++)
+            // Creates a stack for each card type, then puts 10 cards of that type into each stack.
+            Stack<Card>[] stacks = new Stack<Card>[6];
+            for (int i = 0; i < 6; i++)
             {
-                //Variables to decide if the generate number corresponds to a card type that doesn't have 10 cards yet.
-                bool isValid = false;
-                int generatedType;
-                do
+                stacks[i] = new Stack<Card>(10);
+                for (int j = 0; j < 10; j++)
                 {
-                    generatedType = rng.Next(0, 6);
-                    isValid = (generatedCards[generatedType] + 1) <= 10;
-                } while (!isValid);
-
-                //creates a new card passing in the Card.Type gotten back from the Enum.GetValues function.
-                Card generatedCard = new Card((Card.Type)Enum.GetValues(typeof(Card.Type)).GetValue(generatedType));
-
-                //Increments the generated cards counter up by one.
-                generatedCards[generatedType] += 1;
-
-                //Pushes the generated card onto the Deck.
-                Deck.Push(generatedCard);
+                    stacks[i].Push(new Card((Card.Type)i));
+                }
             }
+
+            // Randomly picks a stack, except the previously used stack, and transfers a card from it to the deck.
+            // With this trick, no 2 cards of a kind will be next to each other, and draws will feel more random.
+            int prev = 0;
+            int index;
+            while (stacks[0].Count > 0 && stacks[1].Count > 0 && stacks[2].Count > 0
+                && stacks[3].Count > 0 && stacks[4].Count > 0 && stacks[5].Count > 0)
+            {
+                index = rng.Next(0, 5);
+                if (index >= prev) index++;
+                if (stacks[index].Count > 0)
+                {
+                    Deck.Push(stacks[index].Pop());
+                }
+                prev = index;
+            }
+
+            ////Used to keep track of how many of each card is created.
+            ////As of now, there can only be 10 of each card but I'm sure this will change.
+            //int[] generatedCards = new int[6];
+
+            ////For loop to generate a 60 cards. Again will likely be changed.
+            //for (int i = 0; i < 60; i++)
+            //{
+            //    //Variables to decide if the generate number corresponds to a card type that doesn't have 10 cards yet.
+            //    bool isValid = false;
+            //    int generatedType;
+            //    do
+            //    {
+            //        generatedType = rng.Next(0, 6);
+            //        isValid = (generatedCards[generatedType] + 1) <= 10;
+            //    } while (!isValid);
+
+            //    //creates a new card passing in the Card.Type gotten back from the Enum.GetValues function.
+            //    Card generatedCard = new Card((Card.Type)Enum.GetValues(typeof(Card.Type)).GetValue(generatedType));
+
+            //    //Increments the generated cards counter up by one.
+            //    generatedCards[generatedType] += 1;
+
+            //    //Pushes the generated card onto the Deck.
+            //    Deck.Push(generatedCard);
+            //}
         }
 
         /// <summary>
