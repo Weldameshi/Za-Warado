@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace ZaWarado
 {
@@ -20,6 +21,11 @@ namespace ZaWarado
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        protected override void OnClosed(EventArgs e)
         {
             Application.Current.Shutdown();
         }
