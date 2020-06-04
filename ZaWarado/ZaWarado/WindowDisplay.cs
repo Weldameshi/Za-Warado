@@ -7,8 +7,13 @@ namespace ZaWarado
     {
         public static bool ResumeExistingGame { get; set; } = false;
 
-        private static Window mainMenu = new StartWindow();
+        private static Window mainMenu = null;
         private static Window gameMenu = new MainWindow();
+
+        public static void Initialize(Window startWindow)
+        {
+            mainMenu = startWindow;
+        }
 
         public static void ShowMainMenu()
         {
