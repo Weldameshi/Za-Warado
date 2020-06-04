@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +32,6 @@ namespace ZaWarado
 
         public MainWindow()
         {
-            WindowDisplay.Initialize();
             InitializeComponent();
             btnStyle = FindResource("ButtonStyle") as Style;
             game.StartGame();
@@ -241,6 +241,12 @@ namespace ZaWarado
         private void MainMenu_Click(object sender, RoutedEventArgs e)
         {
             WindowDisplay.ShowMainMenu();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }

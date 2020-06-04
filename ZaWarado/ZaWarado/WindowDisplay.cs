@@ -5,28 +5,10 @@ namespace ZaWarado
 {
     public static class WindowDisplay
     {
-        public static Window Current { get; } = null;
         public static bool ResumeExistingGame { get; set; } = false;
-
-        static bool initialized = false;
 
         private static Window mainMenu = new StartWindow();
         private static Window gameMenu = new MainWindow();
-
-        public static void Initialize()
-        {
-            if (!initialized)
-            {
-                gameMenu.Closed += ClosedGameWindow;
-                initialized = true;
-            }
-        }
-
-        static void ClosedGameWindow(object sender, EventArgs args)
-        {
-            gameMenu = new MainWindow();
-            gameMenu.Closed += ClosedGameWindow;
-        }
 
         public static void ShowMainMenu()
         {
@@ -47,7 +29,7 @@ namespace ZaWarado
         {
             if (ResumeExistingGame)
             {
-                if (!gameMenu.IsActive) mainMenu.Activate();
+                if (!gameMenu.IsActive) gameMenu.Activate();
                 gameMenu.Show();
                 mainMenu.Hide();
             }
