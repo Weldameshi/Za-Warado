@@ -51,5 +51,6 @@
             <TextBlock>R<LineBreak/>E<LineBreak/>S<LineBreak/>T<LineBreak/>A<LineBreak/>R<LineBreak/>T<LineBreak/>
             </TextBlock>
         </Button>
+        <Button Content="Exit" Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="60" Height="50" Click="MainMenu_Click"/>
     </Grid>
 </Window>

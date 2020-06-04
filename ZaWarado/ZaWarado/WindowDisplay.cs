@@ -5,6 +5,7 @@ namespace ZaWarado
     public static class WindowDisplay
     {
         public static Window Current { get; } = null;
+        public static bool ResumeExistingGame { get; set; } = false;
 
         private static Window mainMenu = new StartWindow();
         private static Window gameMenu = new MainWindow();
@@ -16,11 +17,23 @@ namespace ZaWarado
             gameMenu.Hide();
         }
 
+        public static void RestartGame()
+        {
+            if (gameMenu.IsActive) gameMenu.Hide();
+            gameMenu = new MainWindow();
+            gameMenu.Activate();
+            gameMenu.Show();
+        }
+
         public static void ShowGame()
         {
-            if (!gameMenu.IsActive) mainMenu.Activate();
-            gameMenu.Show();
-            mainMenu.Hide();
+            if (ResumeExistingGame)
+            {
+                if (!gameMenu.IsActive) mainMenu.Activate();
+                gameMenu.Show();
+                mainMenu.Hide();
+            }
+            else RestartGame();
         }
     }
 }

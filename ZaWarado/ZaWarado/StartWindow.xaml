@@ -7,8 +7,10 @@
         mc:Ignorable="d"
         Title="StartWindow" Height="450" Width="800">
     <Grid>
-        <Label Content="The Card Building Game" Margin="0,-100,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="The Card Building Game" Margin="0,-200,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="By team Za Warudo" Margin="0,-150,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Button Content="Start Game" Margin="0,-50,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="Start_Click"/>
         <Button Content="Exit App" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="Exit_Click"/>
+        <CheckBox Name="ResumeExistingGame" Content="Resume game (if exists)" Margin="230,-52,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </Window>

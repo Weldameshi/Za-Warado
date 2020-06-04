@@ -200,7 +200,7 @@ namespace ZaWarado
             EndTurn.Background = brush2;
             RestartButton.Style = btnStyle;
             RestartButton.Background = brush2;
-            Color background = Color.FromRgb(166,56,46);
+            Color background = Color.FromRgb(166, 56, 46);
             GameArea.Background = new SolidColorBrush(background);
 
             Color solidLineColor = Color.FromRgb(64, 6, 1);
@@ -231,13 +231,15 @@ namespace ZaWarado
             Restart();
         }
 
-
         //Set button background code
 
         //var brush = new ImageBrush();
         //brush.ImageSource = new BitmapImage(new Uri("Images/ContentImage.png", UriKind.Relative));
         //button1.Background = brush;
 
-
+        private void MainMenu_Click(object sender, RoutedEventArgs e)
+        {
+            WindowDisplay.ShowMainMenu();
+        }
     }
 }

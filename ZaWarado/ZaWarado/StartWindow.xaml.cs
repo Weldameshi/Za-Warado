@@ -7,6 +7,7 @@ namespace ZaWarado
     /// </summary>
     public partial class StartWindow : Window
     {
+
         public StartWindow()
         {
             InitializeComponent();
@@ -14,7 +15,8 @@ namespace ZaWarado
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-
+            WindowDisplay.ResumeExistingGame = (bool)ResumeExistingGame.IsChecked;
+            WindowDisplay.ShowGame();
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
